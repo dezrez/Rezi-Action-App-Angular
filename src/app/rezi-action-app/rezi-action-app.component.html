@@ -1,0 +1,30 @@
+<div *ngIf="init" >
+    <div *ngIf="State==='Loading'">
+        <app-spinner [AppTitle]="init.AppTitle"></app-spinner>
+    </div>
+    <header *ngIf="State==='Loaded'" class="App-header">
+        <img src="assets/img/Logo.svg" alt="angular" class="App-logo-rezi"/>
+        <img src="assets/img/Rezi.svg" alt="rezi" class="App-logo"/>
+
+        <h3>Rezi Angular App Starter</h3>
+        <p>Username From Rezi API: {{Me.ContactName}}</p>
+        <p>
+            WidgetId : {{init.widgetId}}
+        </p>
+        <p>
+            ContainerId : {{init.containerId}}
+        </p>
+
+    </header>
+    <div *ngIf="State==='Error'">
+        <app-error-message [AppTitle]="init.AppTitle" [SupportEmail]="init.SupportEmail" [SupportTel]="init.SupportTel" [ErrorMessage]="ErrorMessage">
+        </app-error-message>
+    </div>
+    <div *ngIf="State==='Disabled'">
+        <app-disabled-message [AppTitle]="init.AppTitle"></app-disabled-message>
+    </div>
+
+
+
+
+</div>

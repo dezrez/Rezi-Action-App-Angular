@@ -1,0 +1,9 @@
+<div *ngIf="Loading === true">
+
+    <app-spinner [AppTitle]="AppTitle"></app-spinner>
+
+</div>
+<div *ngIf="Loading === false" class="App">
+    <app-rezi-action-app [init]="AppInit"></app-rezi-action-app>
+
+</div>
