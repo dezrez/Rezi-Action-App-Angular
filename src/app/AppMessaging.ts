@@ -1,6 +1,6 @@
+import { ContainerSetup } from './DataContracts/BaseModules';
 
-/*DONT CHANGE THIS FILE*/
-export const AppMessaging = (widgetId: number, containerId: string, contractedHeight: number, expandedHeight: number, appStartCallback: any, expandedCallback: any, contractedCallback: any, externalCommandCallback: any) => {
+export const AppMessaging = (containerSetup: ContainerSetup, appStartCallback: any, expandedCallback: any, contractedCallback: any, externalCommandCallback: any, showSettingsCallback: any) => {
 
     //==============================================================
     //THIS FUNCTION RECEIVES EXPECTED MESSAGES AND PROCESSES THEM
@@ -17,7 +17,7 @@ export const AppMessaging = (widgetId: number, containerId: string, contractedHe
             window.addEventListener("message", (event: any): void => {
 
                 console.log(`Message Received By ${document.title}`);
-                if (event.origin !== "null" && event.origin.indexOf(".dezrez.com") < 0) {
+                if (event.origin.indexOf(".dezrez.com") < 0) {
                     console.error(`Message doesn't come from a reliable source ${event.origin}\n${JSON.stringify(event, null, 4)}`);
                     return;
                 }
@@ -31,7 +31,11 @@ export const AppMessaging = (widgetId: number, containerId: string, contractedHe
                             console.log(`Expanded to: ${event.data.height}`);
                             expandedCallback(event.data.height);
                             break;
-                        case "contracted":
+                        case "settings":
+                            console.log(`SHOW Settings`);
+                            showSettingsCallback();
+                            break;
+                            case "contracted":
                             console.log(`Contracted to: ${event.data.height}`);
                             contractedCallback(event.data.height);
                             break;
@@ -51,7 +55,8 @@ export const AppMessaging = (widgetId: number, containerId: string, contractedHe
             //when the widget document has loaded properly, send the message to say it has loaded
             //so that we can receive the token via the message system start command
             //you can specify the contracted and expanded heights of the widget here.
-            window.parent.postMessage({ messageType: "widget_ready", widgetid: widgetId, containerid: containerId, contractedHeight: contractedHeight, expandedHeight: expandedHeight }, "*");
+            
+            window.parent.postMessage({ messageType: "widget_ready", widgetid: containerSetup.WidgetId, containerid: containerSetup.ContainerId, contractedHeight: containerSetup.ContractedHeight, expandedHeight: containerSetup.ExpandedHeight, hasSetup: containerSetup.HasSetup, supportEmail: containerSetup.SupportEmail, supportTel: containerSetup.SupportTel, supportUrl: containerSetup.SupportUrl }, "*");
         }
 
     });

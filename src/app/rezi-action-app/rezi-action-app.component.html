@@ -1,28 +1,59 @@
-<div *ngIf="init" >
-    <div *ngIf="State==='Loading'">
+<div *ngIf="init" style="background-color: grey; min-height:100vh;">
+    <section *ngIf="State==='Loading'">
         <app-spinner [AppTitle]="init.AppTitle"></app-spinner>
-    </div>
-    <header *ngIf="State==='Loaded'" class="App-header">
-        <img src="assets/img/Logo.svg" alt="angular" class="App-logo-rezi"/>
-        <img src="assets/img/Rezi.svg" alt="rezi" class="App-logo"/>
+    </section>
+    <section *ngIf="State==='Default'">
 
-        <h3>Rezi Angular App Starter</h3>
+        <img src="assets/img/Logo.svg" alt="angular" class="App-logo-rezi" />
+        <img src="assets/img/Rezi.svg" alt="rezi" class="App-logo" />
+
+        <h2>Rezi Angular App Starter</h2>
         <p>Username From Rezi API: {{Me.ContactName}}</p>
-        <p>
-            WidgetId : {{init.widgetId}}
-        </p>
-        <p>
-            ContainerId : {{init.containerId}}
-        </p>
+        <p>Style Guide can be found <a href="https://www.figma.com/proto/gkk8GGnjKDp9D0AhsSMlhF/Dashboard?node-id=319%3A4263&viewport=490%2C-124%2C1.019605278968811&scaling=scale-down-width" target="_main">Here</a></p>
+        <div *ngIf="init.widgetId">
+            <h3>WIDGET APP MODE</h3>
+            <p>WidgetId : {{init.widgetId}}</p>
+           
+            <p>Settings can be navigated to using the widgets cog icon</p>
+            <p>Load widget settings using ReziApi.GetWidgetSettings command</p>
+            <p>Default widget width 1-3 and height 1-3, can be changed for your app</p>
+            <h4>In ReziActionAppWrapperComponent</h4>
+                <p>If widget has no settings, set HasSetup = false</p>
+                <p>Make ContractedHeight &lt; ExpandedHeight to allow expansion of widget</p>
+            
 
-    </header>
-    <div *ngIf="State==='Error'">
-        <app-error-message [AppTitle]="init.AppTitle" [SupportEmail]="init.SupportEmail" [SupportTel]="init.SupportTel" [ErrorMessage]="ErrorMessage">
+        </div>
+        <div *ngIf="init.containerId" >
+            <h3>ACTION APP MODE</h3>
+            <p>ContainerId : {{init.containerId}}</p>
+            <p>There are no settings for action apps!</p>
+            <p>Save and Cancel Button Text can be changed for your app</p>
+            <p>Default Width and height can be changed for your app, although they should be responsive</p>
+            <p>The context that has been passed to this app is:</p>
+
+            <pre style="border-radius:10px;padding:10px;width:60vw;text-align: left;margin-left:auto;margin-right: auto;background-color: whitesmoke;">{{init.Context | json}}</pre>
+        </div>
+
+
+
+    </section>
+    <section *ngIf="State==='Settings'">
+        <img src="assets/img/Logo.svg" alt="angular" class="App-logo-rezi" />
+        <img src="assets/img/Rezi.svg" alt="rezi" class="App-logo" />
+        <p><a href="javascript:void(0)" (click)="GoBack()">Back</a></p>
+        <h3>Settings</h3>
+        <p>Collect data here and persist it for a widget using the ReziApi.SaveWidgetSettings command</p>
+        <p>An example component has not been created, because action apps do not require settings, and widgets dont always need settings</p>
+    </section>
+
+    <section *ngIf="State==='Error'">
+        <app-error-message [AppTitle]="init.AppTitle" [SupportEmail]="init.SupportEmail" [SupportTel]="init.SupportTel"
+            [ErrorMessage]="ErrorMessage">
         </app-error-message>
-    </div>
-    <div *ngIf="State==='Disabled'">
+    </section>
+    <section *ngIf="State==='Disabled'">
         <app-disabled-message [AppTitle]="init.AppTitle"></app-disabled-message>
-    </div>
+    </section>
 
 
 

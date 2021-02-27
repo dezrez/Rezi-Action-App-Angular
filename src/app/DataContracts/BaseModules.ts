@@ -35,3 +35,14 @@ export class ExternalApiCall {
     }
  
  }
+
+ export class ContainerSetup {
+    WidgetId: number;
+    ContainerId: string;
+    ContractedHeight: number;
+    ExpandedHeight: number;
+    HasSetup: boolean;
+    SupportEmail: string;
+    SupportTel: string;
+    SupportUrl: string;
+}

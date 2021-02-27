@@ -38,6 +38,6 @@ Unlike Rezi Apps For Dashboard, these action menu apps, cannot store settings, t
 
 ## App Developement Harness
 
-[Test](TestApp.html)
+[Test](src/TestApp.html)
 
 Before you use this, please contact dezrez to discuss the concept and ask for a username and password to systest. Lines 22-25 of [AppMessaging.ts](AppMessaging.ts) can be commented out, as this just checks to see if the source is rezi. When you have logged into [systest](https://rezi-web-systest.dezrez.com/) you can get the dezrez authorization header bearer token from any call to the rezi api **This token will be valid for approx 7200 seconds**. This can be pasted into the input box. The context can also be posted into the second box.
