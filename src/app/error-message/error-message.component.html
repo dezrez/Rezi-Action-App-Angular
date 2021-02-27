@@ -1,0 +1,10 @@
+<section class="ErrorMessage">
+
+    <div class="bold"> <img src="https://rezi-apps.dezrez.com/rezi/Content/Images/error.svg" alt="Error Icon" />
+                "<span>{{AppTitle}}</span>" has experienced an error.
+        <p>{{ErrorMessage}}</p>
+        <app-support [AppTitle]="AppTitle" [SupportEmail]="SupportEmail" [SupportTel]="SupportTel" [ErrorMessage]="ErrorMessage"></app-support>
+        <button class="btn btn-primary" (click)="Reload()">Reload</button>
+    </div>
+
+</section>

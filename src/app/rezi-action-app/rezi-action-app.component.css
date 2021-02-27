@@ -1,0 +1,50 @@
+
+.App-logo {
+  
+    top:0px;
+    height: 20vmin;
+    pointer-events: none;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  
+  .App-logo-rezi {
+  
+    top:0px;
+    height: 20vmin;
+    pointer-events: none;
+    margin-top: 50px;
+    margin-bottom: 50px;
+   
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+    .App-logo-rezi {
+      animation: App-logo-spin-anti infinite 20s linear;
+    }
+  }
+
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes App-logo-spin-anti {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+
+  div {
+    line-height: 80%;
+  }

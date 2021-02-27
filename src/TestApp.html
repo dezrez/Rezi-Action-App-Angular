@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Rezi App Test Harness</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=0, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://rezi-web-systest.dezrez.com/Content/ReziMaster.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="index.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"
+        integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA=="
+        crossorigin="anonymous"></script>
+
+
+</head>
+
+
+
+<body style="padding: 30px;">
+    <h3>Rezi App Test Harness</h3>
+    <p>
+        <Select data-bind="value:api">
+            <option value="https://localapi.dezrez.com/api" >Local</option>
+            <option value="https://core-api-systest.dezrez.com/api">Systest</option>
+        </Select>
+
+
+    </p>
+    <p>
+        <input type="text" placeholder="Your App Served From" style="width: 100%;" data-bind="value:appUrl"/>
+
+    </p>
+
+    <p>
+        <input type="text" placeholder="Paste Rezi Auth Token (beginning with ey...)" style="width: 100%;" data-bind="textInput:token" autofocus/>
+
+    </p>
+    <p>
+        <input type="text" placeholder="Paste Context Json" style="width: 100%;" data-bind="value:context" />
+
+    </p>
+
+    <button data-bind="click:Go, enable: (token && token().length>0)">Load/Refresh App</button>
+
+    <iframe style="width: 100%; height:75vh; overflow-y: auto;" frameborder="1" id="App-this-is-fixed-for-testing" 
+        allowusermedia allow="camera *;microphone *">
+    </iframe>
+    <button id="someButton">Some Action To Be Enabled/Disabled</button>
+   
+
+
+</body>
+<script>
+
+
+    var ViewModel = function () {
+        this.ContainerId = ko.observable("this-is-fixed-for-testing");
+        this.token = ko.observable("");
+        this.context = ko.observable("{}");
+        this.api = ko.observable("https://core-api-systest.dezrez.com/api");
+        this.appUrl = ko.observable("http://localhost:4200/");
+
+      
+
+        window.addEventListener("message", (event) => {
+            
+            try {
+                if (event.data.messageType) {
+
+                    switch (event.data.messageType) {
+                        case "widget_ready"://the widget has sent a message to say it is ready, so send it the token and any context information
+
+                            this.sendStart();
+
+                            break;
+                        case "enableSave"://this app has decided it doesnt need to interupt the flow any more
+                            if (event.data.enable) {
+                                $(`#someButton`).prop("disabled", false);
+                            } else {
+                                $(`#someButton`).prop("disabled", true);
+                            }
+
+                            break;
+                        case "saveSucceeded":
+                            this.Cancel();
+                            break;
+                        case "navigate": //navigate the iframe to a new url
+                            this.BaseUrl(event.data.message.url);
+                            break;
+                        case "navigate_new_tab": //open a new tab with this url, good for authentication flows
+                            window.open(event.data.message.url);
+                            break;
+                        default:
+                            console.error(`Someone tried to send a Message Type we werent expecting. SO DO NOTHING! ${event.data.messageType}`);
+                            return;
+                    }
+                } else {
+                    console.error(`Someone tried to send a Badly Formed Message. SO DO NOTHING! ${JSON.stringify(event.data, null, 4)}`);
+                    return;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+
+
+        }, false);
+
+        this.Go = () => {
+            const iframe = document.querySelector(`#App-${this.ContainerId()}`);
+                if (iframe) {
+                    iframe.src = `${this.appUrl()}?widgetId=0&containerId=${this.ContainerId()}`;
+                }
+        }
+
+        this.sendStart = () => {
+
+            try {
+
+
+                this.SendMessage({ messageType: "start", token: this.token(), refresh: "", context: JSON.parse(this.context()), apiUrl: this.api() });
+
+
+            } catch (e) {
+                console.error(e);
+            }
+
+
+        }
+
+        this.SendMessage = (message) => {
+            try {
+                const iframe = document.querySelector(`#App-${this.ContainerId()}`);
+                if (iframe) {
+                    iframe.contentWindow.postMessage(message, "*");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+    };
+
+
+
+    ko.applyBindings(new ViewModel());
+</script>
+
+</html>
